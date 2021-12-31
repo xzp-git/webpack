@@ -1,9 +1,12 @@
-let title = require('./title')
-let content = require('./content.txt')
-
-console.log(title);
-console.log(content);
-console.log(process.env.NODE_ENV2);
-console.log('node_env',NODE_ENV2);
+import './index.css'
+import './less.less'
+import './sass.scss'
 
 
+
+let pm = require('../assets/pm.png')
+
+console.log(pm);
+let img = new Image()
+img.src = pm.default
+document.body.appendChild(img)
