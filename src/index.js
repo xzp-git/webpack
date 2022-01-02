@@ -3,10 +3,9 @@ import './less.less'
 import './sass.scss'
 
 
+// let pm = require('../assets/pm.png')
 
-let pm = require('../assets/pm.png')
-
-console.log(pm);
-let img = new Image()
-img.src = pm.default
-document.body.appendChild(img)
+// console.log(pm);
+// let img = new Image()
+// img.src = pm
+// document.body.appendChild(img)

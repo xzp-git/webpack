@@ -2,7 +2,8 @@ const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 module.exports = {
     // mode:'none',
-    mode:process.env.NODE_ENV,
+    // mode:process.env.NODE_ENV,
+    mode:'development',
     devtool:false,
     // entry:'./src/index.js'
     entry:{
@@ -38,7 +39,18 @@ module.exports = {
                     {
                         loader:'css-loader', //作用 处理css中的 url  @import 交给 style-loader
                         options:{
-                             importLoaders:1
+                             importLoaders:1,
+                            //  modules:{
+                            //     mode: "local",
+                            //     // auto: true,
+                            //     // exportGlobals: true,
+                            //     localIdentName: "[path][name]__[local]--[hash:base64:5]",
+                            //     // localIdentContext: path.resolve(__dirname, "src"),
+                            //     // localIdentHashSalt: "my-custom-hash",
+                            //     // namedExport: true,
+                            //     // exportLocalsConvention: "camelCase",
+                            //     // exportOnlyLocals: false,
+                            //  }
                         }
                     },
                     'postcss-loader' //css 添加浏览器厂商的前缀
@@ -70,14 +82,33 @@ module.exports = {
                     'sass-loader'// 通过dart-sass把less编译成 css
                 ]
             },
+
             {
                 test:/\.(jpg|png|gif|bmp|svg)$/,
-                use:[
-                    {
-                        loader:'file-loader'
-                    }
-                ]
+                type:'asset/resource',
+                generator:{
+                    filename:'[hash][ext]'
+                }
             }
+            // {
+            //     test:/\.(jpg|png|gif|bmp|svg)$/,
+            //     use:[
+            //         {
+            //             loader:'url-loader',
+            //             options:{
+            //                 esModule:false,
+            //                 limit: 8 * 1024 //以8K为分界线，如果引入的文件小于8K，就把图片变成base64字符串插入html，否则和file-loader一样
+            //             }
+            //         },
+            //         // {
+            //         //     loader:'file-loader',
+            //         //     options:{
+            //         //         esModule:false,
+            //         //         name:'[hash:10].[ext]'
+            //         //     }
+            //         // }
+            //     ]
+            // }
         ]
     },
     plugins:[
