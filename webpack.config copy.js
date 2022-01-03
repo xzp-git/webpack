@@ -2,23 +2,11 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const  webpack  = require('webpack');
 const  CopyWebpackPlugin  = require('copy-webpack-plugin')
-const {CleanWebpackPlugin} = require("clean-webpack-plugin")
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-
-// 压缩css
-const OptimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin')
-//压缩JS
-const TerserWebpackPlugin = require('terser-webpack-plugin')
+const CleanWebpackPlugin = require("clean-webpack-plugin")
 module.exports = {
   // mode:'none',
   // mode:process.env.NODE_ENV,
   mode: 'development',
-  optimization:{
-    minimize:true,
-    minimizer:[
-      new TerserWebpackPlugin()
-    ]
-  },
   devtool: 'cheap-module-source-map',
   /**
    * eval
@@ -72,16 +60,16 @@ module.exports = {
   },
   module: {
     rules: [
-      // {
-      //   test:/lodash/,
-      //   loader:'expose-loader',
-      //   options:{
-      //     exposes:{//向全局对象上也就是window上挂变量 window._如果原来已经_已经
-      //       globalName:'_',
-      //       override:true
-      //     }
-      //   }
-      // }, 
+      {
+        test:/lodash/,
+        loader:'expose-loader',
+        options:{
+          exposes:{//向全局对象上也就是window上挂变量 window._如果原来已经_已经
+            globalName:'_',
+            override:true
+          }
+        }
+      }, 
     //   {
     //     test: /\.js$/,
     //     loader: 'eslint-loader', // 进行代码风格检查
@@ -115,7 +103,7 @@ module.exports = {
       {
         test: /\.css$/,
         use: [ // use 使用数组时 返回的一定是JS 交给webpack  webpack只能打包认识js json
-          MiniCssExtractPlugin.loader, // 把css转成js 交给webpack
+          'style-loader', // 把css转成js 交给webpack
           {
             loader: 'css-loader', // 作用 处理css中的 url  @import 交给 style-loader
             options: {
@@ -139,7 +127,7 @@ module.exports = {
       {
         test: /\.less$/,
         use: [ // use 使用数组时 返回的一定是JS 交给webpack  webpack只能打包认识js json
-          MiniCssExtractPlugin.loader, // 把css转成js 交给webpack
+          'style-loader', // 把css转成js 交给webpack
           {
             loader: 'css-loader', // 作用 处理css中的 url  @import 交给 style-loader
             options: {
@@ -153,7 +141,7 @@ module.exports = {
       {
         test: /\.scss$/,
         use: [ // use 使用数组时 返回的一定是JS 交给webpack  webpack只能打包认识js json
-          MiniCssExtractPlugin.loader, // 把css转成js 交给webpack
+          'style-loader', // 把css转成js 交给webpack
           {
             loader: 'css-loader', // 作用 处理css中的 url  @import 交给 style-loader
             options: {
@@ -169,7 +157,7 @@ module.exports = {
         test: /\.(jpg|png|gif|bmp|svg)$/,
         type: 'asset/resource',
         generator: {
-          filename: '[hash][ext] ',
+          filename: '[hash][ext]',
         },
       },
       // {
@@ -197,10 +185,6 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: './src/index.html',
-      minify:{
-        removeComments:true,
-        collapseWhitespace:true
-      }
     }),
     new webpack.ProvidePlugin({
       _:'lodash'
@@ -217,11 +201,7 @@ module.exports = {
     }),
     new CleanWebpackPlugin({
       cleanOnceBeforeBuildPatterns:['**/*']
-    }),
-    new MiniCssExtractPlugin({
-      filename:'[name].css'
-    }),
-    // new OptimizeCssAssetsWebpackPlugin()
+    })
   ],
 };
 
