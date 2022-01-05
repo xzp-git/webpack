@@ -1,2 +1,4 @@
-const title = require('./title')
-console.log(title);
+import name, {age} from './title'
+console.log(name);
+console.log(age);
+
