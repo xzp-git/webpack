@@ -26,6 +26,28 @@ module.exports = {
 
   },
   module: {
+    rules:[
+      {
+        test:/\.js$/,
+        exclude:/node_modules/,
+        use:{
+          loader:'babel-loader',
+          options:{
+            plugins:[
+              ['import',
+                {
+                  //指定需要按需加载的模块
+                  libraryName: 'lodash',
+                  //按需加载的目录，默认是lib  ''指的是根目录
+                  libraryDirectory:''
+                }
+              ]
+              
+            ]
+          }
+        }
+      }
+    ]
   },
   plugins: [
     new HtmlWebpackPlugin({

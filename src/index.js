@@ -1,4 +1,4 @@
-import name, {age} from './title'
-console.log(name);
-console.log(age);
+import { flatten, concat } from "lodash";
+
+console.log(flatten, concat);
 
