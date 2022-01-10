@@ -34,7 +34,7 @@ module.exports = {
           loader:'babel-loader',
           options:{
             plugins:[
-              ['import',
+              [path.resolve(__dirname, 'import.js'),
                 {
                   //指定需要按需加载的模块
                   libraryName: 'lodash',
