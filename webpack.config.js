@@ -1,6 +1,8 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const {CleanWebpackPlugin} = require("clean-webpack-plugin")
+const DonePlugin = require('./plugins/done-plugin')
+const RunPlugin = require('./plugins/run-plugin')
 
 
 module.exports = {
@@ -8,7 +10,8 @@ module.exports = {
   devtool: 'source-map',
 
   entry: {
-    main: './src/index.js',
+    entry1: './src/index1.js',
+    entry2: './src/index2.js',
   },
   output: {
     path: path.resolve(__dirname, 'dist'), // 输出目录
@@ -50,15 +53,17 @@ module.exports = {
     ]
   },
   plugins: [
-    new HtmlWebpackPlugin({
-      template: './public/index.html',
-      minify:{
-        removeComments:true,
-        collapseWhitespace:true
-      }
-    }),
-    new CleanWebpackPlugin({
-      cleanOnceBeforeBuildPatterns:['**/*']
-    })
+    new RunPlugin(),
+    new DonePlugin(),
+    // new HtmlWebpackPlugin({
+    //   template: './public/index.html',
+    //   minify:{
+    //     removeComments:true,
+    //     collapseWhitespace:true
+    //   }
+    // }),
+    // new CleanWebpackPlugin({
+    //   cleanOnceBeforeBuildPatterns:['**/*']
+    // })
   ],
 };
