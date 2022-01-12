@@ -15,7 +15,7 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, 'dist'), // 输出目录
-    filename: 'main.js', // 输出文件名
+    filename: '[name].js', // 输出文件名
   },
 
   devServer: {
@@ -28,29 +28,41 @@ module.exports = {
     open: true, // 是否打开窗口
 
   },
+  resolve:{
+    extensions:['.js', '.jsx', '.ts', '.tsx', '.json']
+  }, 
   module: {
     rules:[
       {
         test:/\.js$/,
-        exclude:/node_modules/,
-        use:{
-          loader:'babel-loader',
-          options:{
-            plugins:[
-              [path.resolve(__dirname, 'import.js'),
-                {
-                  //指定需要按需加载的模块
-                  libraryName: 'lodash',
-                  //按需加载的目录，默认是lib  ''指的是根目录
-                  libraryDirectory:''
-                }
-              ]
-              
-            ]
-          }
-        }
+        use:[
+          path.resolve(__dirname, 'loaders/logger1.js'),
+          path.resolve(__dirname, 'loaders/logger2.js')
+        ]
       }
     ]
+    // rules:[
+    //   {
+    //     test:/\.js$/,
+    //     exclude:/node_modules/,
+    //     use:{
+    //       loader:'babel-loader',
+    //       options:{
+    //         plugins:[
+    //           [path.resolve(__dirname, 'import.js'),
+    //             {
+    //               //指定需要按需加载的模块
+    //               libraryName: 'lodash',
+    //               //按需加载的目录，默认是lib  ''指的是根目录
+    //               libraryDirectory:''
+    //             }
+    //           ]
+              
+    //         ]
+    //       }
+    //     }
+    //   }
+    // ]
   },
   plugins: [
     new RunPlugin(),

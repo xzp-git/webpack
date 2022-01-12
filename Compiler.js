@@ -1,4 +1,7 @@
 const {SyncHook} = require('tapable');
+const fs = require('fs')
+const path = require('path')
+
 
 const Compilation = require('./Compilation')
 /**
@@ -21,8 +24,18 @@ class Compiler{
         this.hooks.run.call()
         //编译过程...
         // 5. 根据配置中的entry找出入口文件 
-        function onCompile(params) {
-            console.log('onCompile');
+        const onCompile = (err, stats, fileDependencies) => {
+            //10. 在确定好输出内容后，根据配置确定输出的路径和文件名，把文件内容写入到文件系统
+            for (const filename in stats.assets) {
+                let filePath = path.join(this.options.output.path, filename)
+                fs.writeFileSync(filePath, stats.assets[filename], 'utf8')
+            }
+            callback(null, {
+                toJson: () => stats
+            })
+            fileDependencies.forEach(fileDependency => {
+                fs.watch(fileDependency, () => this.compile(onCompile))
+            });
         }
         this.compile(onCompile)
         this.hooks.done.call()
