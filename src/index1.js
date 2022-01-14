@@ -1,4 +1,5 @@
-const title = require('./title.js')
+let sum = (a, b) => {
+    return a + b
+}
 
-console.log(title);
 
