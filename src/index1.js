@@ -1,5 +1,2 @@
-let sum = (a, b) => {
-    return a + b
-}
-
+import './index.less'
 

@@ -6,7 +6,7 @@ const {CleanWebpackPlugin} = require("clean-webpack-plugin")
 module.exports = {
   mode: 'development',
   devtool: 'source-map',
-
+  context:process.cwd().replace(/\\/g, '/'),
   entry: {
     main: './src/index1.js',
   },
@@ -20,7 +20,9 @@ module.exports = {
   }, 
   resolveLoader:{
     alias:{
-      "babel-loader":path.resolve(__dirname, "loaders", "babel-loader")
+      "babel-loader":path.resolve(__dirname, "loaders", "babel-loader"),
+      "less-loader":path.resolve(__dirname, "loaders", "less-loader"),
+      "style-loader":path.resolve(__dirname, "loaders", "style-loader")
     },
     modules:['node_modules', path.resolve(__dirname, 'loaders')]
   },
@@ -35,6 +37,12 @@ module.exports = {
             plugins:[] //单点
           }
         }
+      },
+      {
+        test:/\.less$/,
+        use:[
+          'style-loader', 'less-loader'
+        ]
       }
     ]
     // rules:[
@@ -61,13 +69,13 @@ module.exports = {
     // ]
   },
   plugins: [
-    // new HtmlWebpackPlugin({
-    //   template: './public/index.html',
-    //   minify:{
-    //     removeComments:true,
-    //     collapseWhitespace:true
-    //   }
-    // }),
+    new HtmlWebpackPlugin({
+      template: './public/index.html',
+      minify:{
+        removeComments:true,
+        collapseWhitespace:true
+      }
+    }),
     // new CleanWebpackPlugin({
     //   cleanOnceBeforeBuildPatterns:['**/*']
     // })
