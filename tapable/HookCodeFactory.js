@@ -10,8 +10,12 @@ class HookCodeFactory{
     deInit(){
         this.options = null
     }
-    args(){
+    args(options = {}){
+        let { before, after} = options
         let allArgs = this.options.args
+        if(before) allArgs = [before, ...allArgs]
+        if(after) allArgs = [...allArgs, after]
+
         return allArgs.join(',')
     }
     head(){
@@ -30,19 +34,48 @@ class HookCodeFactory{
             code += content
         }
         return code
-    }/**
+    }
+    callTapsParallel(onDone){
+        let taps = this.options.taps
+
+        let code = `var _counter = ${taps.length}\n`
+        code += `
+        var _done = (function(){
+            ${onDone()}
+        });`
+        for (let i = 0; i < taps.length; i++) {
+            let content = this.callTap(i)
+            code += content
+        }
+        return code
+    }
+    /**
      * 
      * @param {*} i 
      */
     callTap(tapIndex){
         let code = ``
-        code += `var _fn${tapIndex} = _x[${tapIndex}]\n`
+        code += `var _fn${tapIndex} = _x[${tapIndex}];\n`
         let tapInfo = this.options.taps[tapIndex]
         switch (tapInfo.type) {
             case 'sync':
                 code += `_fn${tapIndex}(${this.args()})\n`
                 break;
-        
+            case 'async':
+                code += `
+                _fn${tapIndex}(${this.args({
+                    after:`function(){
+                        if(--_counter === 0) _done()
+                    }`})});`
+                break;
+            case 'promise':
+                code += `
+                var _promise${tapIndex} =  _fn${tapIndex}(${this.args()});
+                _promise${tapIndex}.then(function(){
+                    if(--_counter === 0) _done()
+                })
+                `
+                break;
             default:
                 break;
         }
@@ -67,7 +100,28 @@ class HookCodeFactory{
                 )
                 
                 break;
-        
+            case 'async':
+                fn = new Function(
+                    this.args({after:'_callback'}),
+                    this.head()+this.content({ onDone: () => `_callback();\n` })
+                )
+                
+                break;  
+            case 'promise':
+
+                let tapsContent = this.content({ onDone: () => `_resolve();\n` });
+                let content = `
+                    return new Promise((function (_resolve) {
+                        ${tapsContent}
+                    }));
+                `;
+
+                fn = new Function(
+                    this.args(),
+                    this.head()+content
+                )
+                
+                break;        
             default:
                 break;
         }

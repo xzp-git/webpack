@@ -36,7 +36,7 @@ hook.tapPromise('1', (name) => {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
             console.log(1);
-            resolve()
+            resolve(name)
         },1000)
     })
    
@@ -45,7 +45,7 @@ hook.tapPromise('2', (name) => {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
             console.log(2);
-            resolve()
+            resolve(name)
         },2000)
     })
     
@@ -54,7 +54,7 @@ hook.tapPromise('3', (name) => {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
             console.log(3);
-            resolve()
+            resolve(name)
         },3000)
     })
 })

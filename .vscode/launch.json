@@ -11,7 +11,7 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}\\src\\SyncHook.js"
+            "program": "${workspaceFolder}\\src\\AsyncParallelHook.js"
         }
     ]
 }

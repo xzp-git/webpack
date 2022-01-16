@@ -4,6 +4,16 @@ const CALL_DELEGATE = function(...args) {
     return this.call(...args)
 }
 
+const CALL_ASYNC_DELEGATE = function(...args) {
+    this.callAsync = this._createCall('async')
+    return this.callAsync(...args)
+}
+const PROMISE_DELEGATE = function(...args) {
+    this.promise = this._createCall('promise')
+    return this.promise(...args)
+}
+
+
 class Hook{
     constructor(args){
         //事件回调参数的函数列表数组
@@ -12,9 +22,18 @@ class Hook{
         this.taps = []
         this._x = null //[fn]
         this.call = CALL_DELEGATE
+        this.callAsync = CALL_ASYNC_DELEGATE
+        this.promise = PROMISE_DELEGATE
+
     }
     tap(options, fn){
         this._tap('sync', options, fn)
+    }
+    tapAsync(options, fn){
+        this._tap('async', options, fn)
+    }
+    tapPromise(options, fn){
+        this._tap('promise', options, fn)
     }
     _tap(type, options, fn){
         if (typeof options === 'string') {
@@ -35,7 +54,7 @@ class Hook{
         return this.compile({
             taps:this.taps, //事件函数
             args:this.args,//参数数组
-            type //钩子函数
+            type //类型
         })
     }
 }
