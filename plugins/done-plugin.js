@@ -4,7 +4,13 @@ class DonePlugin{
     }
 
     apply(compiler){
-        console.log('DonePlugin');
+        //在编译 完成后在打印
+        compiler.hooks.done.tap('DonePlugin', (stats, callback) => {
+            setTimeout(() => {
+              console.log('DonePlugin');
+              callback
+            }, 0);
+        })
     }
 }
 

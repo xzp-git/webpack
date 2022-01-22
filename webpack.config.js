@@ -1,7 +1,8 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const DonePlugin = require("./plugins/done-plugin")
-
+const AssetPlugin = require("./plugins/assets-plugin")
+const ArchivePlugin = require("./plugins/archive-plugin")
 
 module.exports = {
   mode: 'development',
@@ -45,28 +46,6 @@ module.exports = {
         ]
       }
     ]
-    // rules:[
-    //   {
-    //     test:/\.js$/,
-    //     exclude:/node_modules/,
-    //     use:{
-    //       loader:'babel-loader',
-    //       options:{
-    //         plugins:[
-    //           [path.resolve(__dirname, 'import.js'),
-    //             {
-    //               //指定需要按需加载的模块
-    //               libraryName: 'lodash',
-    //               //按需加载的目录，默认是lib  ''指的是根目录
-    //               libraryDirectory:''
-    //             }
-    //           ]
-              
-    //         ]
-    //       }
-    //     }
-    //   }
-    // ]
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -76,7 +55,9 @@ module.exports = {
         collapseWhitespace:true
       }
     }),
-    new DonePlugin()
+    new DonePlugin(),
+    new AssetPlugin(),
+    new ArchivePlugin()
     // new CleanWebpackPlugin({
     //   cleanOnceBeforeBuildPatterns:['**/*']
     // })
